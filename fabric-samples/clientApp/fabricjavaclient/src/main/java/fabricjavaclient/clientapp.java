@@ -22,27 +22,23 @@ public class clientapp {
 		Path networkConfigPath = Paths.get("..", "..", "test-network", "organizations", "peerOrganizations", "org1.example.com", "connection-org1.yaml");
 
 		Gateway.Builder builder = Gateway.createBuilder();
-		builder.identity(wallet, "appUser").networkConfig(networkConfigPath).discovery(true);
+		builder.identity(wallet, "appUser");
 
 		// create a gateway connection
 		try (Gateway gateway = builder.connect()) {
 
 			// get the network and contract
-			Network network = gateway.getNetwork("samplechannel");
-			Contract contract = network.getContract("HomeTransfer");
+			Network network = gateway.getNetwork("mychannel");
+			Contract contract = network.getContract("Certification");
 
 			byte[] result;
 
-			contract.submitTransaction("addNewHome", "4", "Home4", "54678", "Grey", "78909");
 
-			result = contract.evaluateTransaction("queryHomeById", "4");
+			result = contract.evaluateTransaction("queryAllCerts");
 			System.out.println(new String(result));
 
-			contract.submitTransaction("changeHomeOwnership", "4", "Joe");
-
-			result = contract.evaluateTransaction("queryHomeById", "4");
-			System.out.println(new String(result));
 		}
 	}
 
 }
+

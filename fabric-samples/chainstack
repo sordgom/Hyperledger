@@ -1,0 +1,21 @@
+docker run -v /home/sordgom/playground/hyperledger/MyProject4/fabric-samples/data/:/Blockchain -it hyperledger/fabric-tools:2.3.0 /bin/bash
+
+
+export CORE_PEER_ADDRESS=nd-947-561-035.rg-391-915.p2pify.com:7051
+export CORE_PEER_MSPCONFIGPATH=/Blockchain/users/Admin@rg-391-915.p2pify.com/msp
+export CORE_PEER_LOCALMSPID="RG-391-915-MSP"
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_TLS_ROOTCERT_FILE=/Blockchain/peers/nd-947-561-035.rg-391-915.p2pify.com/tls/ca.crt
+export ORDERER_CA=/Blockchain/nd-545-499-483-cert.pem
+export ORDERER_ADDRESS=nd-545-499-483.rg-391-915.p2pify.com:7050
+
+peer lifecycle chaincode package Certification.tar.gz --lang java --path /Blockchain/chaincode/Certification/build/install/Certification --label certification_1
+peer lifecycle chaincode install Certification.tar.gz
+peer lifecycle chaincode queryinstalled
+peer lifecycle chaincode getinstalledpackage --package-id certification_1:4b52b73bdab0360dbbb065719e4e68004e662de0f3fc50c8033c5e52ef0856fc --peerAddresses $CORE_PEER_ADDRESS --tls --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE
+peer lifecycle chaincode approveformyorg --name Certification --package-id certification_1:4b52b73bdab0360dbbb065719e4e68004e662de0f3fc50c8033c5e52ef0856fc -o $ORDERER_ADDRESS --tls --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE --cafile $ORDERER_CA --version 1.0 --channelID defaultchannel --sequence 1 --waitForEvent
+peer lifecycle chaincode queryapproved --channelID defaultchannel --name Certification
+peer lifecycle chaincode checkcommitreadiness -o $ORDERER_ADDRESS --channelID defaultchannel --tls --cafile $ORDERER_CA --name Certification --version 1.0 --sequence 1
+peer lifecycle chaincode commit -o $ORDERER_ADDRESS --channelID defaultchannel --name Certification --version 1.0 --sequence 1 --tls --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE --cafile $ORDERER_CA --peerAddresses $CORE_PEER_ADDRESS
+peer chaincode invoke -o $ORDERER_ADDRESS --tls true --cafile $ORDERER_CA -C defaultchannel -n Certification --peerAddresses $CORE_PEER_ADDRESS --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE -c '{"Args":["initLedger"]}'
+

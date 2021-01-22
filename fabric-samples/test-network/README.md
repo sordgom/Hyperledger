@@ -1,5 +1,46 @@
-## Running the test network
+[//]: # (SPDX-License-Identifier: CC-BY-4.0)
+# Choice of technology
+Using hyperledger fabric 2.3 , and building it using solely Java.
 
-You can use the `./network.sh` script to stand up a simple Fabric test network. The test network has two peer organizations with one peer each and a single node raft ordering service. You can also use the `./network.sh` script to create channels and deploy chaincode. For more information, see [Using the Fabric test network](https://hyperledger-fabric.readthedocs.io/en/latest/test_network.html). The test network is being introduced in Fabric v2.0 as the long term replacement for the `first-network` sample.
+# Hyperledger Fabric Samples
 
-Before you can deploy the test network, you need to follow the instructions to [Install the Samples, Binaries and Docker Images](https://hyperledger-fabric.readthedocs.io/en/latest/install.html) in the Hyperledger Fabric documentation.
+You can use Fabric samples to get started working with Hyperledger Fabric, explore important Fabric features, and learn how to build applications that can interact with blockchain networks using the Fabric SDKs. To learn more about Hyperledger Fabric, visit the [Fabric documentation](https://hyperledger-fabric.readthedocs.io/en/latest).
+
+
+## Test network
+
+The [Fabric test network](test-network) in the samples repository provides a Docker Compose based test network with two
+Organization peers and an ordering service node. You can use it on your local machine to run the samples listed below.
+You can also use it to deploy and test your own Fabric chaincodes and applications. To get started, see
+the [test network tutorial](https://hyperledger-fabric.readthedocs.io/en/latest/test_network.html).
+
+## Steps to make
+
+in /test-network run the commands : 
+	* ./network.sh down 					# Shut down the network
+	* ./network.sh up createChannel -c $channelname -ca -s couchdb  # Open the network 
+	* ./installCertificationChaincode.sh   	# Run certificaiton chaincode lifecycle 
+	* ./installCustomsChaincode.sh 		   	# Run customs chaincode lifecycle 
+	* ./installItemChaincode.sh 			# Run ItemVerification chaincode lifecycle 
+	* ./addPeer.sh $peer $port $org 		# Add a certain peer to the channel and install the chaincode on it 
+											# Example: ./addPeer.sh peer2 9071 org2 Customs Org2MSP 9051 8054
+WHERE:
+$channelname is whatever name you want to give to your channel. It is mychannel by default
+$peer $port $org is peer port and org 
+
+## Stuff to try:
+	* ./addPeer.sh isn't completed So:
+		 -it won't run queries for all the chaincodes
+		 -If some red flags appear , run it again
+	* docker ps -a 							# Check the situation of your docker containers hosting peers
+	* /chaincode/$CHANNEL_NAME and run gradle installDist
+											# To update the chaincode
+	* jar tf /chaincode/$CHANNEL_NAME/build/install/$CHANNEL_NAME/*.jar
+											#This allows you to read classes
+
+## License <a name="license"></a>
+
+Hyperledger Project source code files are made available under the Apache
+License, Version 2.0 (Apache-2.0), located in the [LICENSE](LICENSE) file.
+Hyperledger Project documentation files are made available under the Creative
+Commons Attribution 4.0 International License (CC-BY-4.0), available at http://creativecommons.org/licenses/by/4.0/.
