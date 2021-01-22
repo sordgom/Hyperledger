@@ -31,3 +31,8 @@ Hyperledger Project source code files are made available under the Apache
 License, Version 2.0 (Apache-2.0), located in the [LICENSE](LICENSE) file.
 Hyperledger Project documentation files are made available under the Creative
 Commons Attribution 4.0 International License (CC-BY-4.0), available at http://creativecommons.org/licenses/by/4.0/.
+
+## Run tests
+	* source original.sh
+	* CHANGE THE CHAINCODE NAME next to -n , and put what function you want next to Args:
+	peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C mychannel -n Certification --peerAddresses localhost:7051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE_ORG1 --peerAddresses localhost:9051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE_ORG2  -c '{"Args":[]}' 
