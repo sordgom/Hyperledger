@@ -36,3 +36,13 @@ Commons Attribution 4.0 International License (CC-BY-4.0), available at http://c
 	* source original.sh
 	* CHANGE THE CHAINCODE NAME next to -n , and put what function you want next to Args:
 	peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C mychannel -n Certification --peerAddresses localhost:7051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE_ORG1 --peerAddresses localhost:9051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE_ORG2  -c '{"Args":[]}' 
+
+## Stuff to try:
+	* ./addPeer.sh isn't completed So:
+		 -it won't run queries for all the chaincodes
+		 -If some red flags appear , run it again
+	* docker ps -a 							# Check the situation of your docker containers hosting peers
+	* /chaincode/$CHANNEL_NAME and run gradle installDist
+											# To update the chaincode
+	* jar tf /chaincode/$CHANNEL_NAME/build/install/$CHANNEL_NAME/*.jar
+											#This allows you to read classes
